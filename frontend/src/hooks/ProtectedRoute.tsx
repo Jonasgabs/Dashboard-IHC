@@ -1,20 +1,16 @@
-// src/components/routes/ProtectedRoute.tsx
-import { ReactNode } from "react";
-import { Navigate } from "react-router-dom";
 import { useAuth } from "./useAuth";
+import { Navigate, Outlet } from "react-router-dom";
 
-type ProtectedRouteProps = {
-  children: ReactNode;
-  requiredRole?: string;
-};
+export function ProtectedRoute({ children }: { children?: React.ReactNode }) {
+  const { token, isLoading } = useAuth();
 
-export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) {
-  const { user } = useAuth();
+  if (isLoading) {
+    return <div>Carregando...</div>; 
+  }
 
-  const role = user?.role; 
+  if (!token) {
+    return <Navigate to="/signin" replace />;
+  }
 
-  if (!user) return <Navigate to="/signin" replace />;
-  if (requiredRole && role !== requiredRole) return <Navigate to="/" replace />;
-
-  return <>{children}</>;
+  return children ? children : <Outlet />;
 }

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router";
 import { useNavigate } from "react-router-dom";
 import { EyeCloseIcon, EyeIcon } from "../../icons";
 import Label from "../form/Label";
@@ -12,7 +11,7 @@ import axios from "axios";
 export default function SignInForm() {
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState<string>("");
+  const [identifier, setIdentifier] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -21,7 +20,7 @@ export default function SignInForm() {
     e.preventDefault();
     try {
       const response = await axios.post(`${serverUrl}/auth/login`, {
-        email,
+        identifier,
         password,
       });
   
@@ -47,6 +46,7 @@ export default function SignInForm() {
             <p className="text-sm text-gray-500 dark:text-gray-400">
               Entre com o seu Email / User e senha
             </p>
+            {error && <p className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 text-center">{error}</p>}
           </div>
           <div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
@@ -65,9 +65,9 @@ export default function SignInForm() {
                     Email / User <span className="text-error-500">*</span>{" "}
                   </Label>
                   <Input 
-                  placeholder="info@mail.com"
-                  value={email}
-                  onChange={(e)=>{setEmail(e.target.value)}}
+                  placeholder="Email ou nome de usuário"
+                  value={identifier}
+                  onChange={(e)=>{setIdentifier(e.target.value)}}
                   />
                 </div>
                 <div>
@@ -95,12 +95,7 @@ export default function SignInForm() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3"></div>
-                  <Link
-                    to="/reset-password"
-                    className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                  >
-                    Esqueceu a senha?
-                  </Link>
+                  
                 </div>
                 <div>
                   <Button className="w-full" size="sm">
@@ -114,4 +109,4 @@ export default function SignInForm() {
       </div>
     </div>
   );
-}
+} 

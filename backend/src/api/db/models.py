@@ -106,3 +106,12 @@ class SistemaMetricas(Base):
     leads_qualificados = Column(Integer, default=0)
     armazenamento_mb = Column(Float, default=0.0)
     atualizado_em = Column(DateTime, default=func.now(), onupdate=func.now())
+
+class MensagemAutomatica(Base):
+    __tablename__ = "mensagens_automaticas"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    nome = Column(String(255), nullable=False)
+    conteudo = Column(String, nullable=False)
+    ativo = Column(Boolean, default=True)
+    criado_em = Column(DateTime, default=func.now())

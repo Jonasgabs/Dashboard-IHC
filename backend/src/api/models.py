@@ -1,9 +1,11 @@
 from pydantic import BaseModel, EmailStr
 
 class User(BaseModel):
-    name: str  # Nome completo do usuário
-    email: EmailStr  # Email do usuário
-    password: str  # Senha do usuário
+    name: str
+    user_name: str
+    email: EmailStr
+    password: str
+    is_admin: bool = False
 
 class UserCreate(User): 
     pass

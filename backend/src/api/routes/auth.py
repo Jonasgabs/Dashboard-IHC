@@ -7,7 +7,7 @@ from src.api.security import hash_password, create_access_token, verify_password
 from pydantic import BaseModel, EmailStr
 from src.api.dependencies import get_current_user
 
-router = APIRouter(prefix="/auth", tags=["Autenticação"])
+router = APIRouter(tags=["Autenticação"])
 
 class UserLogin(BaseModel):
     identifier: str  
@@ -46,7 +46,6 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="E-mail já está em uso.")
     if db.query(User).filter(User.user_name == user.user_name).first():
         raise HTTPException(status_code=400, detail="Nome de usuário já está em uso.")
-
     is_first_user = db.query(User).count() == 0
 
     new_user = User(
@@ -55,7 +54,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
         email=user.email,
         password=hash_password(user.password),
         is_active=True,
-        is_admin=is_first_user,      
+        is_admin=is_first_user or user.is_admin,      
         is_key_user=is_first_user    
     )
     db.add(new_user)

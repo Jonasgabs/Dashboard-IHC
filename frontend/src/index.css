@@ -200,7 +200,7 @@
 }
 
 @utility menu-item-active {
-  @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
+  @apply bg-yellow-50 text-yellow-500 dark:bg-yellow-500/[0.12] dark:text-yellow-500;
 }
 
 @utility menu-item-inactive {
@@ -208,11 +208,11 @@
 }
 
 @utility menu-item-icon {
-  @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400;
+  @apply text-yellow-500 group-hover:text-yellow-700 dark:text-yellow-400;
 }
 
 @utility menu-item-icon-active {
-  @apply text-brand-500 dark:text-brand-400;
+  @apply text-yellow-500 dark:text-yellow-400;
 }
 
 @utility menu-item-icon-size {
@@ -230,7 +230,7 @@
 }
 
 @utility menu-item-arrow-active {
-  @apply rotate-180 text-brand-500 dark:text-brand-400;
+  @apply rotate-180 text-yellow-500 dark:text-yellow-400;
 }
 
 @utility menu-item-arrow-inactive {
@@ -242,7 +242,7 @@
 }
 
 @utility menu-dropdown-item-active {
-  @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
+  @apply bg-yellow-50 text-yellow-500 dark:bg-yellow-500/[0.12] dark:text-yellow-400;
 }
 
 @utility menu-dropdown-item-inactive {
@@ -250,11 +250,11 @@
 }
 
 @utility menu-dropdown-badge {
-  @apply block rounded-full px-2.5 py-0.5 text-xs font-medium uppercase text-brand-500 dark:text-brand-400;
+  @apply block rounded-full px-2.5 py-0.5 text-xs font-medium uppercase text-yellow-500 dark:text-yellow-400;
 }
 
 @utility menu-dropdown-badge-active {
-  @apply bg-brand-100 dark:bg-brand-500/20;
+  @apply bg-yellow-100 dark:bg-yellow-500/20;
 }
 
 @utility menu-dropdown-badge-inactive {

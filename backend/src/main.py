@@ -13,12 +13,15 @@ import tempfile
 from google.oauth2 import service_account
 # Importando rotas
 from src.api.routes.auth import router as auth_router
+from src.api.routes.routes import router as routes_router
+from src.api.routes.products import router as products_router
+from src.api.routes.autoMessages import router as auto_messages_router
+
 from src.api.middleware import AuthMiddleware
 from src.logger import LogMiddleware
 from src.api.db.database import get_db
 from src.api.services.openai_service import chat_with_openai
-from src.api.routes.routes import router as leads_router
-from src.api.routes.routes import router as user_router
+
 # Google Cloud APIs
 from google.cloud import speech, texttospeech
 
@@ -100,8 +103,9 @@ app.add_middleware(
 
 #Inclusão das rotas
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
-app.include_router(leads_router, prefix="/leads", tags=["leads"])
-app.include_router(user_router, prefix="/users", tags=["users"])
+app.include_router(routes_router, prefix="/leads", tags=["leads"])
+app.include_router(products_router, prefix="/products", tags=["products"])
+app.include_router(auto_messages_router, prefix="/autoMessages", tags=["autoMessages"])
 
 @app.get("/")
 def read_root():
@@ -230,6 +234,10 @@ def custom_openapi():
     }
     app.openapi_schema = openapi_schema
     return app.openapi_schema
+
+print("rotas: ")
+for route in app.routes:
+    print(f"{route.path} -> {route.name}")
 
 #Define a nova configuração OpenAPI
 app.openapi = custom_openapi

@@ -75,3 +75,17 @@
 ## Inicializar db
 
     PYTHONPATH=$(pwd) python src/api/db/init_db.py
+
+    <Link
+                    to="/reset-password"
+                    className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                  >
+                    Esqueceu a senha?
+                  </Link>
+
+KEY_USER
+
+nome: Key_user
+usuário: key_user
+email: jonas.sarmentof@gmail.com
+senha: user@admin123

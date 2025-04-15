@@ -12,7 +12,9 @@ type AuthContextType = {
   token: string | null;
   login: (userData: User, token: string) => void;
   logout: () => void;
+  isLoading: boolean;
 };
+
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -23,25 +25,28 @@ type AuthProviderProps = {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     try {
       const storedUser = localStorage.getItem("user");
       const storedToken = localStorage.getItem("token");
-
+  
       if (storedUser && storedToken) {
         setUser(JSON.parse(storedUser));
         setToken(storedToken);
       } else {
-        console.warn("Token ou usuário não encontrado");
         localStorage.removeItem("user");
         localStorage.removeItem("token");
       }
     } catch (error) {
       console.error("Erro ao carregar o token:", error);
       localStorage.clear();
+    } finally {
+      setIsLoading(false);
     }
   }, []);
+  
 
   const login = (userData: User, token: string) => {
     if (!userData) {
@@ -64,7 +69,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

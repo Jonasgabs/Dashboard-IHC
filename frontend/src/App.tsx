@@ -14,11 +14,15 @@ import BarChart from "./pages/Charts/BarChart";
 import Calendar from "./pages/Calendar";
 import BasicTables from "./pages/Tables/BasicTables";
 import FormElements from "./pages/Forms/FormElements";
+import AddProduct from "./pages/Forms/AddProduct";
+import ShowProduct from "./pages/Forms/ShowProduct";
+import AutoMessagesPage from "./pages/Forms/AutoMessages";
 import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import { ProtectedRoute } from "./hooks/ProtectedRoute"
+
 
 export default function App() {
   return (
@@ -34,10 +38,14 @@ export default function App() {
           }
         >
           <Route index path="/" element={<Home />} />
+
           <Route path="/profile" element={<UserProfiles />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/blank" element={<Blank />} />
           <Route path="/form-elements" element={<FormElements />} />
+          <Route path="/add-product" element={<AddProduct />} />
+          <Route path="/show-product" element={<ShowProduct />} />
+          <Route path="/auto-messages" element={<AutoMessagesPage />} />
           <Route path="/basic-tables" element={<BasicTables />} />
           <Route path="/alerts" element={<Alerts />} />
           <Route path="/avatars" element={<Avatars />} />
@@ -51,7 +59,11 @@ export default function App() {
 
         {/* Rotas públicas */}
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signup" element={
+          <ProtectedRoute>
+          <SignUp />
+          </ProtectedRoute>
+          } />
 
         {/* Fallback */}
         <Route path="*" element={<NotFound />} />
