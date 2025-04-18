@@ -1,4 +1,4 @@
-import { useEffect, useState, ChangeEvent } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 import PageMeta from "../../components/common/PageMeta";

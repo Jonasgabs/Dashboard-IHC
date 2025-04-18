@@ -25,7 +25,7 @@ export default function AddProduto() {
   const [novaDor, setNovaDor] = useState("");
   const [novoBeneficio, setNovoBeneficio] = useState("");
 
-  const adicionarItem = (item: string, set: any, value: string, clear: () => void) => {
+  const adicionarItem = (_: string, set: any, value: string, clear: () => void) => {
     if (value.trim()) {
       set((prev: string[]) => [...prev, value.trim()]);
       clear();
