@@ -6,8 +6,8 @@ export default function SignIn() {
   return (
     <>
       <PageMeta
-        title="Login - Leading Prospect core"
-        description="Leading Prospect core - Flavia Golveia"
+        title="Login"
+        description=""
       />
       <AuthLayout>
         <SignInForm />

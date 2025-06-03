@@ -7,7 +7,7 @@ export default function SignUp() {
     <>
       <PageMeta
         title="Registrar Usuario"
-        description="Leading Prospect core - Flavia Golveia"      />
+        description=""      />
       <AuthLayout>
         <SignUpForm />
       </AuthLayout>
