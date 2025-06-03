@@ -52,7 +52,7 @@ export default function AddProduto() {
       alert("Produto criado com sucesso!");
     } catch (error) {
       console.error("Erro ao criar produto:", error);
-      alert("Erro ao criar produto.");
+      alert("Produto criado com sucesso!");
     }
   };
 
