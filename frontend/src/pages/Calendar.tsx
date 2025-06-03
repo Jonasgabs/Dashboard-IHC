@@ -115,13 +115,15 @@ const Calendar: React.FC = () => {
     setSelectedEvent(null);
   };
 
-  return (
+return (
     <>
       <PageMeta
         title="Calendário de eventos"
         description="Calendario de eventos"
       />
-      <div className="rounded-2xl border  border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+
+      <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+
         <div className="custom-calendar">
           <FullCalendar
             ref={calendarRef}
@@ -143,6 +145,9 @@ const Calendar: React.FC = () => {
                 click: openModal,
               },
             }}
+            height="auto"      
+            aspectRatio={1.8} 
+                             
           />
         </div>
         <Modal
