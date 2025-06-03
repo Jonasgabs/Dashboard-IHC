@@ -21,7 +21,7 @@ import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
-import { ProtectedRoute } from "./hooks/ProtectedRoute"
+
 
 
 export default function App() {
@@ -31,10 +31,8 @@ export default function App() {
       <Routes>
         {/* Rotas protegidas com layout */}
         <Route
-          element={
-            <ProtectedRoute>
+          element={ 
               <AppLayout />
-            </ProtectedRoute>
           }
         >
           <Route index path="/" element={<Home />} />
@@ -60,11 +58,8 @@ export default function App() {
         {/* Rotas públicas */}
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={
-          <ProtectedRoute>
           <SignUp />
-          </ProtectedRoute>
           } />
-
         {/* Fallback */}
         <Route path="*" element={<NotFound />} />
       </Routes>
