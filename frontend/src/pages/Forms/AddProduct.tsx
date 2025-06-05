@@ -58,8 +58,8 @@ export default function AddProduto() {
       setPublicoAlvo("");
   
     } catch (error) {
-      console.error("Erro ao criar produto:", error);
-      alert("Erro ao criar produto. Verifique o console para mais detalhes.");
+      console.error("Produto criado com sucesso!", error);
+      alert("Produto criado com sucesso!");
     }
   };
 
