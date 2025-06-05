@@ -1,11 +1,17 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { EventInput, DateSelectArg, EventClickArg } from "@fullcalendar/core";
-import { Modal } from "../components/ui/modal";
-import { useModal } from "../hooks/useModal";
+
+// Importações para Tooltip (VERIFIQUE OS CAMINHOS!)
+import Tooltip from "../components/ui/tooltips/Tooltip"; 
+import { calendarEventTooltips } from "../components/ui/tooltips/CalendarEventTooltipTexts";
+
+// Suas importações existentes (VERIFIQUE OS CAMINHOS!)
+import { Modal } from "../components/ui/modal"; 
+import { useModal } from "../hooks/useModal";   
 import PageMeta from "../components/common/PageMeta";
 
 interface CalendarEvent extends EventInput {
@@ -34,7 +40,6 @@ const Calendar: React.FC = () => {
   };
 
   useEffect(() => {
-    // Initialize with some events
     setEvents([
       {
         id: "1",
@@ -77,7 +82,6 @@ const Calendar: React.FC = () => {
 
   const handleAddOrUpdateEvent = () => {
     if (selectedEvent) {
-      // Update existing event
       setEvents((prevEvents) =>
         prevEvents.map((event) =>
           event.id === selectedEvent.id
@@ -92,13 +96,12 @@ const Calendar: React.FC = () => {
         )
       );
     } else {
-      // Add new event
       const newEvent: CalendarEvent = {
         id: Date.now().toString(),
         title: eventTitle,
         start: eventStartDate,
         end: eventEndDate,
-        allDay: true,
+        allDay: true, 
         extendedProps: { calendar: eventLevel },
       };
       setEvents((prevEvents) => [...prevEvents, newEvent]);
@@ -115,7 +118,20 @@ const Calendar: React.FC = () => {
     setSelectedEvent(null);
   };
 
-return (
+  const renderEventContent = (eventInfo: any) => {
+    const colorClass = `fc-bg-${eventInfo.event.extendedProps.calendar.toLowerCase()}`;
+    return (
+      <div
+        className={`event-fc-color flex fc-event-main ${colorClass} p-1 rounded-sm`}
+      >
+        <div className="fc-daygrid-event-dot"></div>
+        <div className="fc-event-time">{eventInfo.timeText}</div>
+        <div className="fc-event-title">{eventInfo.event.title}</div>
+      </div>
+    );
+  };
+
+  return (
     <>
       <PageMeta
         title="Calendário de eventos"
@@ -123,7 +139,6 @@ return (
       />
 
       <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-
         <div className="custom-calendar">
           <FullCalendar
             ref={calendarRef}
@@ -142,12 +157,22 @@ return (
             customButtons={{
               addEventButton: {
                 text: "Add Evento +",
-                click: openModal,
+                click: () => { 
+                  resetModalFields(); 
+                  openModal();
+                },
               },
             }}
-            height="auto"      
-            aspectRatio={1.8} 
-                             
+            height="auto"
+            aspectRatio={1.8}
+            locale='pt-br'
+            buttonText={{
+                today:    'Hoje',
+                month:    'Mês',
+                week:     'Semana',
+                day:      'Dia',
+                list:     'Lista'
+            }}
           />
         </div>
         <Modal
@@ -165,24 +190,33 @@ return (
               </p>
             </div>
             <div className="mt-8">
-              <div>
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+              {/* Título do evento com Tooltip */}
+              <div className="mb-4"> {/* Adicionado mb-4 para espaçamento entre os campos */}
+                <div className="flex items-center space-x-2 mb-1.5">
+                  <label htmlFor="event-title" className="block text-sm font-medium text-gray-700 dark:text-gray-400">
                     Título do evento
                   </label>
-                  <input
-                    id="event-title"
-                    type="text"
-                    value={eventTitle}
-                    onChange={(e) => setEventTitle(e.target.value)}
-                    className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                  />
+                  <Tooltip text={calendarEventTooltips.title} position="right" />
                 </div>
+                <input
+                  id="event-title"
+                  type="text"
+                  value={eventTitle}
+                  onChange={(e) => setEventTitle(e.target.value)}
+                  className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                  placeholder="Ex: Reunião de Projeto"
+                />
               </div>
-              <div className="mt-6">
-                <label className="block mb-4 text-sm font-medium text-gray-700 dark:text-gray-400">
-                  Etiqueta
-                </label>
+
+              {/* Etiqueta com Tooltip */}
+              <div className="mb-4"> {/* Adicionado mb-4 */}
+                <div className="flex items-center space-x-2 mb-1.5">
+                  <label htmlFor="event-level-select" className="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                    Etiqueta
+                  </label>
+                  <Tooltip text={calendarEventTooltips.label} position="right" />
+                </div>
+                {/* CORREÇÃO AQUI: Fechar o map e o div corretamente */}
                 <div className="flex flex-wrap items-center gap-4 sm:gap-5">
                   {Object.entries(calendarsEvents).map(([key, value]) => (
                     <div key={key} className="n-chk">
@@ -215,38 +249,42 @@ return (
                         </label>
                       </div>
                     </div>
-                  ))}
+                  ))} {/* Fechamento do .map() */}
+                </div> {/* Fechamento do div que envolve os radio buttons */}
+              </div> {/* Fechamento do div mb-4 da Etiqueta */}
+              
+              {/* Data de início com Tooltip */}
+              <div className="mb-4"> {/* Adicionado mb-4 */}
+                <div className="flex items-center space-x-2 mb-1.5">
+                  <label htmlFor="event-start-date" className="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                    Data de início
+                  </label>
+                  <Tooltip text={calendarEventTooltips.startDate} position="right" />
                 </div>
+                <input
+                  id="event-start-date"
+                  type="datetime-local" // Alterado para datetime-local para incluir hora
+                  value={eventStartDate}
+                  onChange={(e) => setEventStartDate(e.target.value)}
+                  className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                />
               </div>
 
-              <div className="mt-6">
-                <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                  Data de início
-                </label>
-                <div className="relative">
-                  <input
-                    id="event-start-date"
-                    type="date"
-                    value={eventStartDate}
-                    onChange={(e) => setEventStartDate(e.target.value)}
-                    className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                  />
+              {/* Data de fim com Tooltip */}
+              <div className="mb-4"> {/* Adicionado mb-4 */}
+                <div className="flex items-center space-x-2 mb-1.5">
+                  <label htmlFor="event-end-date" className="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                    Data de fim
+                  </label>
+                  <Tooltip text={calendarEventTooltips.endDate} position="right" />
                 </div>
-              </div>
-
-              <div className="mt-6">
-                <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                  Data de fim
-                </label>
-                <div className="relative">
-                  <input
-                    id="event-end-date"
-                    type="date"
-                    value={eventEndDate}
-                    onChange={(e) => setEventEndDate(e.target.value)}
-                    className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                  />
-                </div>
+                <input
+                  id="event-end-date"
+                  type="datetime-local" // Alterado para datetime-local
+                  value={eventEndDate}
+                  onChange={(e) => setEventEndDate(e.target.value)}
+                  className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                />
               </div>
             </div>
             <div className="flex items-center gap-3 mt-6 modal-footer sm:justify-end">
@@ -269,19 +307,6 @@ return (
         </Modal>
       </div>
     </>
-  );
-};
-
-const renderEventContent = (eventInfo: any) => {
-  const colorClass = `fc-bg-${eventInfo.event.extendedProps.calendar.toLowerCase()}`;
-  return (
-    <div
-      className={`event-fc-color flex fc-event-main ${colorClass} p-1 rounded-sm`}
-    >
-      <div className="fc-daygrid-event-dot"></div>
-      <div className="fc-event-time">{eventInfo.timeText}</div>
-      <div className="fc-event-title">{eventInfo.event.title}</div>
-    </div>
   );
 };
 
